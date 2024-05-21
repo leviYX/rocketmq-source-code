@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.bouncycastle:bcpkix-jdk15on:1.69">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../Program Files (x86)/apache-maven-3.6.1-bin/apache-maven-3.6.1/repo/org/bouncycastle/bcpkix-jdk15on/1.69/bcpkix-jdk15on-1.69.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../Program Files (x86)/apache-maven-3.6.1-bin/apache-maven-3.6.1/repo/org/bouncycastle/bcpkix-jdk15on/1.69/bcpkix-jdk15on-1.69-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../Program Files (x86)/apache-maven-3.6.1-bin/apache-maven-3.6.1/repo/org/bouncycastle/bcpkix-jdk15on/1.69/bcpkix-jdk15on-1.69-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

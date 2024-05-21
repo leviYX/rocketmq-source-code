@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/acl/rocketmq-acl.iml" filepath="$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/acl/rocketmq-acl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/rocketmq-all.iml" filepath="$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/rocketmq-all.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/broker/rocketmq-broker.iml" filepath="$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/broker/rocketmq-broker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/client/rocketmq-client.iml" filepath="$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/client/rocketmq-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/common/rocketmq-common.iml" filepath="$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/common/rocketmq-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/distribution/rocketmq-distribution.iml" filepath="$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/distribution/rocketmq-distribution.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/example/rocketmq-example.iml" filepath="$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/example/rocketmq-example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/filter/rocketmq-filter.iml" filepath="$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/filter/rocketmq-filter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/logging/rocketmq-logging.iml" filepath="$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/logging/rocketmq-logging.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/namesrv/rocketmq-namesrv.iml" filepath="$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/namesrv/rocketmq-namesrv.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/openmessaging/rocketmq-openmessaging.iml" filepath="$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/openmessaging/rocketmq-openmessaging.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/remoting/rocketmq-remoting.iml" filepath="$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/remoting/rocketmq-remoting.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/rocketmq-rocketmq-all-4.9.4.iml" filepath="$PROJECT_DIR$/.idea/rocketmq-rocketmq-all-4.9.4.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/srvutil/rocketmq-srvutil.iml" filepath="$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/srvutil/rocketmq-srvutil.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/store/rocketmq-store.iml" filepath="$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/store/rocketmq-store.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/test/rocketmq-test.iml" filepath="$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/test/rocketmq-test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/tools/rocketmq-tools.iml" filepath="$PROJECT_DIR$/rocketmq-rocketmq-all-4.9.4/tools/rocketmq-tools.iml" />
+    </modules>
+  </component>
+</project>

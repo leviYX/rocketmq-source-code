@@ -1,0 +1,52 @@
+2022-12-27 20:50:44 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@5c671d7f
+2022-12-27 20:50:44 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@3de8f619
+2022-12-27 20:50:44 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@eadd4fb
+2022-12-27 20:50:44 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@740fb309
+2022-12-27 20:50:44 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@7bd7d6d6
+2022-12-27 20:50:45 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@4983159f
+2022-12-27 20:50:45 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@101639ae
+2022-12-27 20:50:45 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@4c550889
+2022-12-27 20:50:45 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@1d2bd371
+2022-12-27 20:50:45 INFO main - Looking for a resource file of name [META-INF/service/org.apache.rocketmq.remoting.RPCHook] ...
+2022-12-27 20:50:45 WARN main - No resource file with name [META-INF/service/org.apache.rocketmq.remoting.RPCHook] found.
+2022-12-27 20:50:45 WARN main - Unknown channel option 'SO_KEEPALIVE' for channel '[id: 0x4e24b147]'
+2022-12-27 20:50:45 WARN main - Unknown channel option 'SO_KEEPALIVE' for channel '[id: 0x6bb43a13]'
+2022-12-27 20:51:16 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@5c671d7f
+2022-12-27 20:51:16 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@7ba8c737
+2022-12-27 20:51:16 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@16c069df
+2022-12-27 20:51:16 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@2bec854f
+2022-12-27 20:51:16 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@31edaa7d
+2022-12-27 20:51:16 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@11eadcba
+2022-12-27 20:51:16 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@1b065145
+2022-12-27 20:51:16 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@45cff11c
+2022-12-27 20:51:16 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@207ea13
+2022-12-27 20:51:17 INFO main - Looking for a resource file of name [META-INF/service/org.apache.rocketmq.remoting.RPCHook] ...
+2022-12-27 20:51:17 WARN main - No resource file with name [META-INF/service/org.apache.rocketmq.remoting.RPCHook] found.
+2022-12-27 20:51:17 WARN main - Unknown channel option 'SO_KEEPALIVE' for channel '[id: 0x006778e5]'
+2022-12-27 20:51:17 WARN main - Unknown channel option 'SO_KEEPALIVE' for channel '[id: 0x8bd57024]'
+2022-12-27 20:51:58 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@5c671d7f
+2022-12-27 20:51:58 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@26adfd2d
+2022-12-27 20:51:58 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@205d38da
+2022-12-27 20:51:58 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@6950ed69
+2022-12-27 20:51:58 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@6dd7b5a3
+2022-12-27 20:51:59 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@45cff11c
+2022-12-27 20:51:59 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@4bff1903
+2022-12-27 20:51:59 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@62dae540
+2022-12-27 20:51:59 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@5827af16
+2022-12-27 20:51:59 INFO main - Looking for a resource file of name [META-INF/service/org.apache.rocketmq.remoting.RPCHook] ...
+2022-12-27 20:51:59 WARN main - No resource file with name [META-INF/service/org.apache.rocketmq.remoting.RPCHook] found.
+2022-12-27 20:51:59 WARN main - Unknown channel option 'SO_KEEPALIVE' for channel '[id: 0xf82fed17]'
+2022-12-27 20:51:59 WARN main - Unknown channel option 'SO_KEEPALIVE' for channel '[id: 0x832cefc8]'
+2022-12-27 20:52:43 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@687e99d8
+2022-12-27 20:52:43 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@2ab4bc72
+2022-12-27 20:52:43 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@740fb309
+2022-12-27 20:52:43 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@7bd7d6d6
+2022-12-27 20:52:43 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@43f02ef2
+2022-12-27 20:52:44 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@4983159f
+2022-12-27 20:52:44 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@101639ae
+2022-12-27 20:52:44 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@4c550889
+2022-12-27 20:52:44 INFO main - instrumented a special java.util.Set into: sun.nio.ch.WindowsSelectorImpl@1d2bd371
+2022-12-27 20:52:44 INFO main - Looking for a resource file of name [META-INF/service/org.apache.rocketmq.remoting.RPCHook] ...
+2022-12-27 20:52:44 WARN main - No resource file with name [META-INF/service/org.apache.rocketmq.remoting.RPCHook] found.
+2022-12-27 20:52:45 WARN main - Unknown channel option 'SO_KEEPALIVE' for channel '[id: 0xb539c3dc]'
+2022-12-27 20:52:45 WARN main - Unknown channel option 'SO_KEEPALIVE' for channel '[id: 0x86d81213]'
