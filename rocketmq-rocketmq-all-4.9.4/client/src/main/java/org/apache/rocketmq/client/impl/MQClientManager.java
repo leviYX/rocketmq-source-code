@@ -45,14 +45,19 @@ public class MQClientManager {
     }
 
     public MQClientInstance getOrCreateMQClientInstance(final ClientConfig clientConfig, RPCHook rpcHook) {
+        // 创建生成client id,每个生产者都有自己的客户端ID
         String clientId = clientConfig.buildMQClientId();
+        // 从这个缓存里面先获取一次，其实是个chashMap
         MQClientInstance instance = this.factoryTable.get(clientId);
+        // 第一次初始化就是空的
         if (null == instance) {
             instance =
                 new MQClientInstance(clientConfig.cloneClientConfig(),
                     this.factoryIndexGenerator.getAndIncrement(), clientId, rpcHook);
+            // 第一次生成之后来到这里缓存，并且返回
             MQClientInstance prev = this.factoryTable.putIfAbsent(clientId, instance);
             if (prev != null) {
+                // 从map返回
                 instance = prev;
                 log.warn("Returned Previous MQClientInstance for clientId:[{}]", clientId);
             } else {

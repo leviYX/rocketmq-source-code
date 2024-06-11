@@ -25,10 +25,14 @@ import java.util.Map;
 public class Message implements Serializable {
     private static final long serialVersionUID = 8445773977080406428L;
 
+    // 消息投递的topic，代表一类消息的集合，逻辑概念
     private String topic;
     private int flag;
+    // 是个map，会放一些内容属性，比如tag属性就在这里设置
     private Map<String, String> properties;
+    // 消息体，用来放置你的消息内容
     private byte[] body;
+    // 事务消息的时候会用到
     private String transactionId;
 
     public Message() {

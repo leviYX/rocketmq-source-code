@@ -280,10 +280,12 @@ public class DefaultMQProducer extends ClientConfig implements MQProducer {
      */
     @Override
     public void start() throws MQClientException {
-        // 使用生产者组名称，产生命名空间，然后做再封装，加强了一层，一般用于在不同的业务场景下做隔离，以namespace做业务场景的区分
+        // 使用生产者组名称，产生命名空间，然后做再封装，加强了一层，一般用于在不同的业务场景下做隔离，
+        // 以namespace做业务场景的区分
         this.setProducerGroup(withNamespace(this.producerGroup));
         // 启动发送，重点方法
         this.defaultMQProducerImpl.start();
+        // 这里是做消息追踪的
         if (null != traceDispatcher) {
             try {
                 traceDispatcher.start(this.getNamesrvAddr(), this.getAccessChannel());

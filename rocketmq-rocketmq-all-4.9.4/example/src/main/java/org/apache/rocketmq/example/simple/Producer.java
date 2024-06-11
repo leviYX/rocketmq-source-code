@@ -29,7 +29,6 @@ public class Producer {
         DefaultMQProducer producer = new DefaultMQProducer("ProducerGroupName");
         producer.setNamesrvAddr("127.0.0.1:9876");
         producer.start();
-
         for (int i = 0; i < 128; i++)
             try {
                 {
@@ -40,11 +39,9 @@ public class Producer {
                     SendResult sendResult = producer.send(msg);
                     System.out.printf("%s%n", sendResult);
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         producer.shutdown();
     }
 }
