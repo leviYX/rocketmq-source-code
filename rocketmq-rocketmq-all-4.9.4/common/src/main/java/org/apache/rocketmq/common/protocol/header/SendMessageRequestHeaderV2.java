@@ -29,7 +29,6 @@ import io.netty.buffer.ByteBuf;
 
 /**
  * Use short variable name to speed up FastJson deserialization process.
- * 傻逼命名 阿里规范阿里人不遵守
  */
 public class SendMessageRequestHeaderV2 implements CommandCustomHeader, FastCodesHeader {
     @CFNotNull
