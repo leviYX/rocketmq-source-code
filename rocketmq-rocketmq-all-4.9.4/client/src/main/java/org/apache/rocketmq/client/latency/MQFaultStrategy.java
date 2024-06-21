@@ -56,6 +56,7 @@ public class MQFaultStrategy {
     }
 
     public MessageQueue selectOneMessageQueue(final TopicPublishInfo tpInfo, final String lastBrokerName) {
+        // 这个为false，这时候不会进入这个逻辑
         if (this.sendLatencyFaultEnable) {
             try {
                 int index = tpInfo.getSendWhichQueue().incrementAndGet();

@@ -27,6 +27,15 @@ import org.apache.rocketmq.remoting.protocol.RemotingCommand;
 
 public interface RemotingServer extends RemotingService {
 
+    /**
+     * 方法描述
+     * @param requestCode 用于识别不同类型、不同版本的请求，Producer 发送投递消息请求的 RequestCode 就是 SEND_MESSAGE_V2
+     * @param processor 即上面代码中的 sendProcessor，是处理请求的核心类
+     * @param executor 最后一个参数是在处理请求时，会执行一些并发任务，此时会使用到上一步骤中提到的线程池。
+     * @return: void
+     * @author: LWQ
+     * @date: 2024/6/21
+     */
     void registerProcessor(final int requestCode, final NettyRequestProcessor processor,
         final ExecutorService executor);
 

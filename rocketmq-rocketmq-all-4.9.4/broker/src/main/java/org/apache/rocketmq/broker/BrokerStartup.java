@@ -54,7 +54,10 @@ public class BrokerStartup {
     public static InternalLogger log;
 
     public static void main(String[] args) {
-        start(createBrokerController(args));
+        // 初始化BrokerController,就是要读取一堆配置，赋值给对应的成员变量
+        BrokerController controller = createBrokerController(args);
+        // 注册和配置完毕之后，启动所有组件，准备开始运行接受业务处理
+        start(controller);
     }
 
     public static BrokerController start(BrokerController controller) {
@@ -92,6 +95,7 @@ public class BrokerStartup {
         try {
             //PackageConflictDetect.detectFastjson();
             Options options = ServerUtil.buildCommandlineOptions(new Options());
+            // 初始化commandLine，这里存储我们再启动的时候配置的那些配置属性，被解析到这里
             commandLine = ServerUtil.parseCmdLine("mqbroker", args, buildCommandlineOptions(options),
                 new PosixParser());
             if (null == commandLine) {
@@ -133,16 +137,19 @@ public class BrokerStartup {
 
             MixAll.properties2Object(ServerUtil.commandLine2Properties(commandLine), brokerConfig);
 
+            // 这里是获取你配置的home变量，你不配置也会输出异常，并且exit code为 -2,
             if (null == brokerConfig.getRocketmqHome()) {
                 System.out.printf("Please set the %s variable in your environment to match the location of the RocketMQ installation", MixAll.ROCKETMQ_HOME_ENV);
                 System.exit(-2);
             }
 
+            // nameserv配置的校验，多个地址需要用冒号隔开
             String namesrvAddr = brokerConfig.getNamesrvAddr();
             if (null != namesrvAddr) {
                 try {
                     String[] addrArray = namesrvAddr.split(";");
                     for (String addr : addrArray) {
+                        // 校验地址是不是合法
                         RemotingUtil.string2SocketAddress(addr);
                     }
                 } catch (Exception e) {
@@ -209,6 +216,7 @@ public class BrokerStartup {
             MixAll.printObjectProperties(log, nettyClientConfig);
             MixAll.printObjectProperties(log, messageStoreConfig);
 
+            // 到这里BrokerController被创建出来，该有的元素都有了，下面就是要初始化BrokerController，为一些变量赋值
             final BrokerController controller = new BrokerController(
                 brokerConfig,
                 nettyServerConfig,

@@ -68,18 +68,23 @@ public class TopicPublishInfo {
 
     public MessageQueue selectOneMessageQueue(final String lastBrokerName) {
         if (lastBrokerName == null) {
+            // 第一次投递
             return selectOneMessageQueue();
         } else {
+            // 失败重试
             for (int i = 0; i < this.messageQueueList.size(); i++) {
                 int index = this.sendWhichQueue.incrementAndGet();
                 int pos = Math.abs(index) % this.messageQueueList.size();
                 if (pos < 0)
                     pos = 0;
                 MessageQueue mq = this.messageQueueList.get(pos);
+                // 重试的时候lastBrokerName不为空。此时才会进来这里，然后会遍历一次messageQueue，找到和上次失败的不一样的
+                // broker进行投递，因为他认为你在一个broker上失败了，那再次在这个broker上投递很有可能还是失败，所以要换一个
                 if (!mq.getBrokerName().equals(lastBrokerName)) {
                     return mq;
                 }
             }
+            // 没找到就继续下来再查一次
             return selectOneMessageQueue();
         }
     }

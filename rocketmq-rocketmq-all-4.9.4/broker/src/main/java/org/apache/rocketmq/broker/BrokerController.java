@@ -241,6 +241,16 @@ public class BrokerController {
     }
 
     public boolean initialize() throws CloneNotSupportedException {
+        /*
+          Broker可能不是第一次启动，可能它之前已经运行过一段时间了，Broker之前的运行数据会存储在磁盘上。类似于offset
+          所以，在启动时需要先去加载这部分数据，恢复之前运行的现场。
+          topicConfigManager加载关于之前topic的信息：rocketmqnamesrv/store/config/topic.json 文件。
+                它里面存储了所有 Topic 的配置，比如当前这个 Topic 是否是顺序消费、权限是啥、读写 MessageQueue 的数量是多少，等等
+          consumerOffsetManager加载之前消费者消费进度的信息
+          subscriptionGroupManager加载订阅关系
+          每个 Manager 负责从磁盘加载自己负责的维度内数据，每个 Manager 对应着磁盘上的一个文件。那 Broker 怎么知道这文件在磁盘哪里呢？
+          就是我们在 broker.conf 中配置的 StorePathRootDir这个配置项
+         */
         boolean result = this.topicConfigManager.load();
 
         result = result && this.consumerOffsetManager.load();
@@ -274,6 +284,7 @@ public class BrokerController {
             NettyServerConfig fastConfig = (NettyServerConfig) this.nettyServerConfig.clone();
             fastConfig.setListenPort(nettyServerConfig.getListenPort() - 2);
             this.fastRemotingServer = new NettyRemotingServer(fastConfig, this.clientHousekeepingService);
+            // 下面是初始化一堆线程池，用来后面做异步业务处理
             this.sendMessageExecutor = new BrokerFixedThreadPoolExecutor(
                 this.brokerConfig.getSendMessageThreadPoolNums(),
                 this.brokerConfig.getSendMessageThreadPoolNums(),
@@ -345,7 +356,7 @@ public class BrokerController {
             this.consumerManageExecutor =
                 Executors.newFixedThreadPool(this.brokerConfig.getConsumerManageThreadPoolNums(), new ThreadFactoryImpl(
                     "ConsumerManageThread_"));
-
+            // 这里注册一个处理器，后续处理不同请求的 Handler
             this.registerProcessor();
 
             final long initialDelay = UtilAll.computeNextMorningTimeMillis() - System.currentTimeMillis();

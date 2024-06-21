@@ -541,11 +541,13 @@ public class DefaultMQProducerImpl implements MQProducerInner {
         final long timeout
     ) throws MQClientException, RemotingException, MQBrokerException, InterruptedException {
         this.makeSureStateOK();
+        // 对消息进行校验，其实都是些简单校验，就一个mq的消息体不能超过4MB默认，需要在生产端和broker端修改
         Validators.checkMessage(msg, this.defaultMQProducer);
         final long invokeID = random.nextLong();
         long beginTimestampFirst = System.currentTimeMillis();
         long beginTimestampPrev = beginTimestampFirst;
         long endTimestamp = beginTimestampFirst;
+        // 拿到这个topic得元信息封装在这里
         TopicPublishInfo topicPublishInfo = this.tryToFindTopicPublishInfo(msg.getTopic());
         if (topicPublishInfo != null && topicPublishInfo.ok()) {
             boolean callTimeout = false;

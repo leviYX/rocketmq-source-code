@@ -173,6 +173,7 @@
         <module>logging</module>
         <module>acl</module>
         <module>example</module>
+        <module>jmh-demo</module>
     </modules>
 
     <build>
