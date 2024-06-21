@@ -140,10 +140,13 @@ public class BrokerOuterAPI {
             final byte[] body = requestBody.encode(compressed);
             final int bodyCrc32 = UtilAll.crc32(body);
             requestHeader.setBodyCrc32(bodyCrc32);
+            // 每个broker都注册，使用countDownLatch做最后的统一结束
             final CountDownLatch countDownLatch = new CountDownLatch(nameServerAddressList.size());
+            // 每个broker会遍历所有的nameServ，然后把自己的信息全部注册上去每个nameServ
             for (final String namesrvAddr : nameServerAddressList) {
                 brokerOuterExecutor.execute(() -> {
                     try {
+                        // 和nameserv通信，发起注册
                         RegisterBrokerResult result = registerBroker(namesrvAddr, oneway, timeoutMills, requestHeader, body);
                         if (result != null) {
                             registerBrokerResultList.add(result);
@@ -254,6 +257,8 @@ public class BrokerOuterAPI {
         throw new MQBrokerException(response.getCode(), response.getRemark(), brokerAddr);
     }
 
+    // Broker 会去请求所有的 NameServer，查询自己传给 NameServer 的数据，然后跟自己本地的数据版本做一个对比。
+    //只要有任何一台 NameServer 的数据是旧的，Broker 就会重新执行心跳，换句话说：needRegister() 的判定就会为 true
     public List<Boolean> needRegister(
         final String clusterName,
         final String brokerAddr,

@@ -900,6 +900,7 @@ public class BrokerController {
             this.registerBrokerAll(true, false, true);
         }
 
+        // broker启动之后启动一个定时线程池，来执行和nameserv的心跳，心跳30秒一次，每次携带自己broker的数据，上报nameserv
         this.scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
 
             @Override
@@ -955,18 +956,21 @@ public class BrokerController {
             }
             topicConfigWrapper.setTopicConfigTable(topicConfigTable);
         }
-
+        // 满足if里面的两个条件才可以发起心跳，forceRegister在启动之后就赋值为true了，所以第一次一定会执行，一定会上报一次
+        // needRegister则是判断是不是需要注册
         if (forceRegister || needRegister(this.brokerConfig.getBrokerClusterName(),
             this.getBrokerAddr(),
             this.brokerConfig.getBrokerName(),
             this.brokerConfig.getBrokerId(),
             this.brokerConfig.getRegisterBrokerTimeoutMills())) {
+            // do开头的，正是干活的，这里就是发起心跳的
             doRegisterBrokerAll(checkOrderConfig, oneway, topicConfigWrapper);
         }
     }
 
     private void doRegisterBrokerAll(boolean checkOrderConfig, boolean oneway,
         TopicConfigSerializeWrapper topicConfigWrapper) {
+        // registerBrokerAll发起注册
         List<RegisterBrokerResult> registerBrokerResultList = this.brokerOuterAPI.registerBrokerAll(
             this.brokerConfig.getBrokerClusterName(),
             this.getBrokerAddr(),
@@ -994,7 +998,8 @@ public class BrokerController {
             }
         }
     }
-
+    // 判断是不是需要发起心跳，其实就是判断 DataVersion 是否一致，很清晰明了的判断。然后 Broker 会 Check 每一台 NameServer 的返回，
+    // 任意一台 NameServer 的数据不一致都会触发最后的心跳逻辑
     private boolean needRegister(final String clusterName,
         final String brokerAddr,
         final String brokerName,
@@ -1005,6 +1010,7 @@ public class BrokerController {
         List<Boolean> changeList = brokerOuterAPI.needRegister(clusterName, brokerAddr, brokerName, brokerId, topicConfigWrapper, timeoutMills);
         boolean needRegister = false;
         for (Boolean changed : changeList) {
+            // 但凡有一台 NameServer 的数据是旧的, 都要执行心跳
             if (changed) {
                 needRegister = true;
                 break;
