@@ -1228,14 +1228,14 @@ public class DefaultMQProducerImpl implements MQProducerInner {
     }
 
     public TransactionSendResult sendMessageInTransaction(final Message msg,
-        final LocalTransactionExecuter localTransactionExecuter, final Object arg)
-        throws MQClientException {
+        final LocalTransactionExecuter localTransactionExecuter, final Object arg) throws MQClientException {
         TransactionListener transactionListener = getCheckListener();
         if (null == localTransactionExecuter && null == transactionListener) {
             throw new MQClientException("tranExecutor is null", null);
         }
 
         // ignore DelayTimeLevel parameter
+        // 如果我们对 Message 设置了延迟等级，这里会直接使用 clearProperty() 将其清除掉，这是因为事务消息不支持延迟消息。
         if (msg.getDelayTimeLevel() != 0) {
             MessageAccessor.clearProperty(msg, MessageConst.PROPERTY_DELAY_TIME_LEVEL);
         }
@@ -1243,9 +1243,12 @@ public class DefaultMQProducerImpl implements MQProducerInner {
         Validators.checkMessage(msg, this.defaultMQProducer);
 
         SendResult sendResult = null;
+        // 标记此消息的属性，为Half Message，也就是一阶段消息，这个阶段的消息无法被消费者消费，消费者看不到它
         MessageAccessor.putProperty(msg, MessageConst.PROPERTY_TRANSACTION_PREPARED, "true");
         MessageAccessor.putProperty(msg, MessageConst.PROPERTY_PRODUCER_GROUP, this.defaultMQProducer.getProducerGroup());
         try {
+            // 此时这个half一阶段消息就封装完成了，他就代表一个事务消息被投递到broker中，下面的方式和其他消息无二，只是多了一些属性
+            // 此时消息就流转去了broker，下一步我们就要去broker去看对事务消息的处理了
             sendResult = this.send(msg);
         } catch (Exception e) {
             throw new MQClientException("send message Exception", e);
@@ -1253,22 +1256,30 @@ public class DefaultMQProducerImpl implements MQProducerInner {
 
         LocalTransactionState localTransactionState = LocalTransactionState.UNKNOW;
         Throwable localException = null;
+        // 投递结束之后，生产者会拿到结果状态
         switch (sendResult.getSendStatus()) {
-            case SEND_OK: {
+            case SEND_OK: {// 如果发送成功进入这个case
                 try {
                     if (sendResult.getTransactionId() != null) {
                         msg.putUserProperty("__transactionId__", sendResult.getTransactionId());
                     }
+                    // 获取事务ID
                     String transactionId = msg.getProperty(MessageConst.PROPERTY_UNIQ_CLIENT_MESSAGE_ID_KEYIDX);
                     if (null != transactionId && !"".equals(transactionId)) {
+                        // 塞到消息msg中后面要用，事务是链路，消息随着链路走，就能一路拿到
                         msg.setTransactionId(transactionId);
                     }
                     if (null != localTransactionExecuter) {
                         localTransactionState = localTransactionExecuter.executeLocalTransactionBranch(msg, arg);
                     } else if (transactionListener != null) {
+                        // 注意，我们开始在producer塞进去了这个，而且不塞回报错，所以会走入这个分支取出这个监听器发起对producer
+                        // 本地事务的回调执行
                         log.debug("Used new transaction API");
+                        // 注意，此时他发起自己的回调方法，执行本地事务，你看名字也知道他在干啥executeLocalTransaction
+                        // 并且返回了结果状态LocalTransactionState这是个枚举默认返回LocalTransactionState.UNKNOW
                         localTransactionState = transactionListener.executeLocalTransaction(msg, arg);
                     }
+                    // 你看，他就很默认，哪怕你没返回值他都给你来个默认这个值
                     if (null == localTransactionState) {
                         localTransactionState = LocalTransactionState.UNKNOW;
                     }
@@ -1294,6 +1305,7 @@ public class DefaultMQProducerImpl implements MQProducerInner {
         }
 
         try {
+            // 此时事务消息half被处理完了，这里回来收尾
             this.endTransaction(msg, sendResult, localTransactionState, localException);
         } catch (Exception e) {
             log.warn("local transaction execute " + localTransactionState + ", but end broker transaction failed", e);
@@ -1317,10 +1329,8 @@ public class DefaultMQProducerImpl implements MQProducerInner {
         return send(msg, this.defaultMQProducer.getSendMsgTimeout());
     }
 
-    public void endTransaction(
-        final Message msg,
-        final SendResult sendResult,
-        final LocalTransactionState localTransactionState,
+    // 收尾事务消息
+    public void endTransaction(final Message msg, final SendResult sendResult, final LocalTransactionState localTransactionState,
         final Throwable localException) throws RemotingException, MQBrokerException, InterruptedException, UnknownHostException {
         final MessageId id;
         if (sendResult.getOffsetMsgId() != null) {
@@ -1340,7 +1350,7 @@ public class DefaultMQProducerImpl implements MQProducerInner {
             case ROLLBACK_MESSAGE:
                 requestHeader.setCommitOrRollback(MessageSysFlag.TRANSACTION_ROLLBACK_TYPE);
                 break;
-            case UNKNOW:
+            case UNKNOW:// 这是那个默认值
                 requestHeader.setCommitOrRollback(MessageSysFlag.TRANSACTION_NOT_TYPE);
                 break;
             default:
@@ -1352,6 +1362,9 @@ public class DefaultMQProducerImpl implements MQProducerInner {
         requestHeader.setTranStateTableOffset(sendResult.getQueueOffset());
         requestHeader.setMsgId(sendResult.getMsgId());
         String remark = localException != null ? ("executeLocalTransactionBranch exception: " + localException.toString()) : null;
+        // 在这里给broker发消息，发一个RequestCode.END_TRANSACTIO=37的状态码，此时broker接受到之后
+        // 我们来理解一下，此时我priducer这里本地事务执行完毕了，此时就要告诉broker，我这里成功了，你处理我刚才给你的那个一阶段消息吧
+        // 于是下一步要broker登场干活了
         this.mQClientFactory.getMQClientAPIImpl().endTransactionOneway(brokerAddr, requestHeader, remark,
             this.defaultMQProducer.getSendMsgTimeout());
     }

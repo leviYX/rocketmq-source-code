@@ -464,20 +464,25 @@ public class RouteInfoManager {
 
         return null;
     }
-
+    // 扫描broker集合中不活跃也就是已经离线的broker节点，移除出broker集合
     public int scanNotActiveBroker() {
         int removeCount = 0;
+        // nameserv在自己这里维护了一个集合
         Iterator<Entry<String, BrokerLiveInfo>> it = this.brokerLiveTable.entrySet().iterator();
-        while (it.hasNext()) {
+        while (it.hasNext()) {// 遍历这个broker集合
             Entry<String, BrokerLiveInfo> next = it.next();
+            // 获取当前遍历的broker的上次更新数据时间戳
             long last = next.getValue().getLastUpdateTimestamp();
+            // BROKER_CHANNEL_EXPIRED_TIME:两分钟1000 * 60 * 2 该不等式为当前时间 减去 上次更新时间 大于 2分钟
+            // 换言之就是距离上次broker在nameserv更新信息已经过去两分钟了 ，rmq认为你超时了，那你就是掉线了
             if ((last + BROKER_CHANNEL_EXPIRED_TIME) < System.currentTimeMillis()) {
+                // nameserv端发起断开和broker的连接
                 RemotingUtil.closeChannel(next.getValue().getChannel());
+                // 然后把这个broker信息从内存列表移除
                 it.remove();
                 log.warn("The broker channel expired, {} {}ms", next.getKey(), BROKER_CHANNEL_EXPIRED_TIME);
                 this.onChannelDestroy(next.getKey(), next.getValue().getChannel());
-
-                removeCount++;
+                removeCount++;// 返回一共移除了几个broker信息
             }
         }
 

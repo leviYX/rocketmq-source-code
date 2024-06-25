@@ -276,11 +276,14 @@ public class SendMessageProcessor extends AbstractSendMessageProcessor implement
 
         final byte[] body = request.getBody();
 
+        // 这里会判断Producer选择的MessageQueue是否出现了非法的情况，比如queueIdInt小于0，
+        // 就会从当前的 Topic的WriteQueue中随机选择一个
         int queueIdInt = requestHeader.getQueueId();
         TopicConfig topicConfig = this.brokerController.getTopicConfigManager().selectTopicConfig(requestHeader.getTopic());
 
-        if (queueIdInt < 0) {
-            queueIdInt = randomQueueId(topicConfig.getWriteQueueNums());
+        int writeQueueNums = topicConfig.getWriteQueueNums();
+        if (queueIdInt < 0 || queueIdInt > writeQueueNums) {
+            queueIdInt = randomQueueId(writeQueueNums);
         }
 
         MessageExtBrokerInner msgInner = new MessageExtBrokerInner();
@@ -313,8 +316,10 @@ public class SendMessageProcessor extends AbstractSendMessageProcessor implement
         }
 
         CompletableFuture<PutMessageResult> putMessageResult = null;
+        // 获取消息的一个属性，这个属性的消息其实就是事务消息，也就是一阶段消息
         String transFlag = origProps.get(MessageConst.PROPERTY_TRANSACTION_PREPARED);
         if (Boolean.parseBoolean(transFlag)) {
+            // 这里就是事务消息
             if (this.brokerController.getBrokerConfig().isRejectTransactionMessage()) {
                 response.setCode(ResponseCode.NO_PERMISSION);
                 response.setRemark(
@@ -322,8 +327,12 @@ public class SendMessageProcessor extends AbstractSendMessageProcessor implement
                                 + "] sending transaction message is forbidden");
                 return CompletableFuture.completedFuture(response);
             }
+            // 事务消息的处理，如何写入commitlogasyncPrepareMessage，这里面会把消息的topic重写为RMQ_SYS_TRANS_HALF_TOPIC
+            // 这里可以看到事务一阶段消息不会按照你得那个topic发送，而是内部做了中转，变为了内部的一个topic
+            // 其余的处理和普通消息无二，只是内部做了对topic的转站，此时你消费者那边订阅的可不就看不到了吗，要等二阶段来唤醒
             putMessageResult = this.brokerController.getTransactionalMessageService().asyncPrepareMessage(msgInner);
         } else {
+            //写入消息到commitLog
             putMessageResult = this.brokerController.getMessageStore().asyncPutMessage(msgInner);
         }
         return handlePutMessageResultFuture(putMessageResult, response, request, msgInner, responseHeader, mqtraceContext, ctx, queueIdInt);

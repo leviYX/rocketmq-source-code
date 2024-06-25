@@ -42,7 +42,7 @@ public class TransactionProducer {
         TransactionMQProducer producer = new TransactionMQProducer(PRODUCER_GROUP);
 
         // Uncomment the following line while debugging, namesrvAddr should be set to your local address
-//        producer.setNamesrvAddr(DEFAULT_NAMESRVADDR);
+        producer.setNamesrvAddr(DEFAULT_NAMESRVADDR);
         ExecutorService executorService = new ThreadPoolExecutor(2, 5, 100, TimeUnit.SECONDS, new ArrayBlockingQueue<>(2000), r -> {
             Thread thread = new Thread(r);
             thread.setName("client-transaction-msg-check-thread");
@@ -51,7 +51,7 @@ public class TransactionProducer {
 
         producer.setExecutorService(executorService);
         producer.setTransactionListener(transactionListener);
-        producer.start();
+        producer.start();// 初始化一些东西，就是给个线程池啥的
 
         String[] tags = new String[] {"TagA", "TagB", "TagC", "TagD", "TagE"};
         for (int i = 0; i < MESSAGE_COUNT; i++) {
@@ -59,6 +59,7 @@ public class TransactionProducer {
                 Message msg =
                     new Message(TOPIC, tags[i % tags.length], "KEY" + i,
                         ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET));
+                // 投递事务消息
                 SendResult sendResult = producer.sendMessageInTransaction(msg, null);
                 System.out.printf("%s%n", sendResult);
 

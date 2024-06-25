@@ -84,12 +84,12 @@ public class TransactionMQProducer extends DefaultMQProducer {
     }
 
     @Override
-    public TransactionSendResult sendMessageInTransaction(final Message msg,
-        final Object arg) throws MQClientException {
+    public TransactionSendResult sendMessageInTransaction(final Message msg, final Object arg) throws MQClientException {
         if (null == this.transactionListener) {
+            // 这里必须设置回调监听器，不然事务消息无法进行
             throw new MQClientException("TransactionListener is null", null);
         }
-
+        // 为这个消息设置topic等信息，告诉这个消息你要往哪里投，其实这里就是把你的topic和你的broker包装一下
         msg.setTopic(NamespaceUtil.wrapNamespace(this.getNamespace(), msg.getTopic()));
         return this.defaultMQProducerImpl.sendMessageInTransaction(msg, null, arg);
     }

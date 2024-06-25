@@ -791,7 +791,6 @@ public class DefaultMessageStore implements MessageStore {
                 sbr.release();
             }
         }
-
         return null;
     }
 
