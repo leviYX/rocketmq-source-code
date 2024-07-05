@@ -65,12 +65,13 @@ public class NamesrvStartup {
         }
         return null;
     }
-
+    // 初始化NamesrvController，nameserv的启动器
     public static NamesrvController createNamesrvController(String[] args) throws IOException, JoranException {
         System.setProperty(RemotingCommand.REMOTING_VERSION_KEY, Integer.toString(MQVersion.CURRENT_VERSION));
         //PackageConflictDetect.detectFastjson();
 
         Options options = ServerUtil.buildCommandlineOptions(new Options());
+        // 解析命令行参数，封装到commandLine
         commandLine = ServerUtil.parseCmdLine("mqnamesrv", args, buildCommandlineOptions(options), new PosixParser());
         if (null == commandLine) {
             System.exit(-1);
@@ -104,7 +105,7 @@ public class NamesrvStartup {
         }
 
         MixAll.properties2Object(ServerUtil.commandLine2Properties(commandLine), namesrvConfig);
-
+        // 检验nameserv的环境变量ROCKETMQ_HOME是否配置了
         if (null == namesrvConfig.getRocketmqHome()) {
             System.out.printf("Please set the %s variable in your environment to match the location of the RocketMQ installation%n", MixAll.ROCKETMQ_HOME_ENV);
             System.exit(-2);
@@ -128,7 +129,7 @@ public class NamesrvStartup {
 
         return controller;
     }
-
+    // 在这里会启动nameserv端的netty服务端，后续和其他producer交互
     public static NamesrvController start(final NamesrvController controller) throws Exception {
 
         if (null == controller) {

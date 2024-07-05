@@ -316,7 +316,7 @@ public class SendMessageProcessor extends AbstractSendMessageProcessor implement
         }
 
         CompletableFuture<PutMessageResult> putMessageResult = null;
-        // 获取消息的一个属性，这个属性的消息其实就是事务消息，也就是一阶段消息
+        // 获取消息的一个属性，这个属性为true的消息其实就是事务消息，也就是一阶段消息
         String transFlag = origProps.get(MessageConst.PROPERTY_TRANSACTION_PREPARED);
         if (Boolean.parseBoolean(transFlag)) {
             // 这里就是事务消息

@@ -83,6 +83,7 @@ public class NamesrvController {
             Executors.newFixedThreadPool(nettyServerConfig.getServerWorkerThreads(), new ThreadFactoryImpl("RemotingExecutorThread_"));
 
         this.registerProcessor();
+        // NameServer 会每隔 10 秒去尝试清理一次已经 120 秒没有发送过心跳的 Broker
         // 注册一个定时任务，周期性地清理掉已经失效的broker，这个定时任务周期为10秒，而broker向nameserv发起心跳的周期是30秒
         // 这样nameser频率更高，就能主动探测，而不是等broker上报，总结一句话NameServer会每隔10秒去尝试清理一次已经120秒没有发送过心跳的broker
         this.scheduledExecutorService.scheduleAtFixedRate(NamesrvController.this.routeInfoManager::scanNotActiveBroker, 5, 10, TimeUnit.SECONDS);
